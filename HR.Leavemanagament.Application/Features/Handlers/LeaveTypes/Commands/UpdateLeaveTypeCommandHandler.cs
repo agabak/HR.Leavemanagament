@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using HR.Leavemanagament.Application.DTOs.LeaveTypes.Validators;
 using HR.Leavemanagament.Application.Contracts.Persistence;
+using HR.Leavemanagament.Application.DTOs.Exceptions;
+using HR.Leavemanagament.Application.DTOs.LeaveTypes.Validators;
 using HR.Leavemanagament.Application.Responses;
+using HR.Leavemanagament.Domain;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,19 +27,14 @@ namespace HR.Leavemanagament.Application.Features.Handlers.LeaveTypes.Commands
             var validator = new UpdateLeaveTypeValidator();
             var validationResult = await validator.ValidateAsync(request.UpdateLeaveTypeDto);
 
-            if(!validationResult.IsValid)
+            if (!validationResult.IsValid)
             {
-                response.Id = request.UpdateLeaveTypeDto.Id;
-                response.Success = false;
-                response.Message = "Fail to update LeaveType";
-                response.Errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-
-                return response;
+                throw new ValidationException(validationResult);
             }
 
             var leaveType = await _leaveTypeRepository.Get(request.UpdateLeaveTypeDto.Id);
 
-            if (leaveType is null) throw new Exception();
+            if (leaveType is null) throw new NotFoundException(nameof(LeaveType), request.UpdateLeaveTypeDto.Id);
 
             _mapper.Map(request.UpdateLeaveTypeDto, leaveType);
 

@@ -7,6 +7,7 @@ using MediatR;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using HR.Leavemanagament.Application.DTOs.Exceptions;
 
 namespace HR.Leavemanagament.Application.Features
 {
@@ -31,10 +32,7 @@ namespace HR.Leavemanagament.Application.Features
 
             if (!validationResult.IsValid)
             {
-                response.Success = false;
-                response.Message = "Fail to create LeaveType";
-                response.Errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return response;
+                throw new ValidationException(validationResult);
             }
 
             var leaveType = await _leaveTypeRepository.Add(_mapper.Map<LeaveType>(request.LeaveTypeDto));
@@ -42,7 +40,6 @@ namespace HR.Leavemanagament.Application.Features
             response.Id = leaveType.Id;
             response.Success = true;
             response.Message = "LeaveType Created successful";
-
 
             return response;
         }

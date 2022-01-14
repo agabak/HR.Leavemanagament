@@ -4,6 +4,7 @@ using HR.Leavemanagament.Application.Contracts.Persistence;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using HR.Leavemanagament.Application.DTOs.Exceptions;
 
 namespace HR.Leavemanagament.Application.Features
 {
@@ -21,6 +22,9 @@ namespace HR.Leavemanagament.Application.Features
         public async Task<LeaveTypeDto> Handle(GetLeaveTypeDetailRequest request, CancellationToken cancellationToken)
         {
             var leaveType = await _leaveTypeRepository.Get(request.Id);
+
+            if (leaveType == null) throw new NotFoundException(nameof(LeaveRequestDto), request.Id);
+
             return _mapper.Map<LeaveTypeDto>(leaveType);
         }
     }

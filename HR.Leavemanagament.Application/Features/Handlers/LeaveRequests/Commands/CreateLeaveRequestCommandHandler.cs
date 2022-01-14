@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using HR.Leavemanagament.Application.DTOs.LeaveRequests.Validators;
+using HR.Leavemanagament.Application.Contracts.Infrastructure;
 using HR.Leavemanagament.Application.Contracts.Persistence;
+using HR.Leavemanagament.Application.DTOs.Exceptions;
+using HR.Leavemanagament.Application.DTOs.LeaveRequests.Validators;
+using HR.Leavemanagament.Application.Models;
 using HR.Leavemanagament.Application.Responses;
 using HR.Leavemanagament.Domain;
 using MediatR;
-using System.Linq;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using HR.Leavemanagament.Application.Contracts.Infrastructure;
-using HR.Leavemanagament.Application.Models;
-using System;
 
 namespace HR.Leavemanagament.Application.Features
 {
@@ -37,14 +37,11 @@ namespace HR.Leavemanagament.Application.Features
             var validator = new CreateLeaveRequestValidator(_leaveTypeRepository);
             var validationResult = await validator.ValidateAsync(request.CreateLeaveRequestDto);
 
-            if(!validationResult.IsValid)
+            if (!validationResult.IsValid)
             {
-                response.Success = false;
-                response.Message = "Fail to create LeaveRequest";
-                response.Errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return response;
+                throw new ValidationException(validationResult);
             }
-           
+
 
             var leaveRequest = _mapper.Map<LeaveRequest>(request.CreateLeaveRequestDto);
 

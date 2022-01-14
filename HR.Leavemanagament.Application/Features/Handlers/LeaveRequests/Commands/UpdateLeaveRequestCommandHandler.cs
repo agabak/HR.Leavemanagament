@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using HR.Leavemanagament.Application.DTOs.LeaveRequests.Validators;
+using HR.Leavemanagament.Application.Contracts.Infrastructure;
 using HR.Leavemanagament.Application.Contracts.Persistence;
+using HR.Leavemanagament.Application.DTOs.Exceptions;
+using HR.Leavemanagament.Application.DTOs.LeaveRequests.Validators;
+using HR.Leavemanagament.Application.Models;
 using HR.Leavemanagament.Application.Responses;
 using MediatR;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using HR.Leavemanagament.Application.Contracts.Infrastructure;
-using HR.Leavemanagament.Application.Models;
 
 namespace HR.Leavemanagament.Application.Features.Handlers.LeaveRequests.Commands
 {
@@ -35,12 +35,9 @@ namespace HR.Leavemanagament.Application.Features.Handlers.LeaveRequests.Command
             var validator = new UpdateLeaveRequestValidator(_leaveTypeRepository);
             var validationResult = await validator.ValidateAsync(request.UpdateLeaveRequestDto);
 
-            if(!validationResult.IsValid)
+            if (!validationResult.IsValid)
             {
-                response.Success = false;
-                response.Message = "Fail to create leaveRequest";
-                response.Errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return response;
+                throw new ValidationException(validationResult);
             }
 
             var leaveRequest = await _leaveRequestResposity.Get(request.UpdateLeaveRequestDto.Id);
