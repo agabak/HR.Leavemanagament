@@ -6,10 +6,8 @@ using HR.Leavemanagament.Application.Profiles;
 using HR.Leavemanagament.Application.UnitTests.Mocks;
 using Moq;
 using Shouldly;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -42,6 +40,7 @@ namespace HR.Leavemanagament.Application.UnitTests.LeaveRequests.Queries
             result.ShouldBeOfType<List<LeaveRequestListDto>>();
 
             result.Count.ShouldBe(2);
+
             result.FirstOrDefault().Id.ShouldBe(1);
         }
 
