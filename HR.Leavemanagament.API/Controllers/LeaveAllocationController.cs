@@ -33,6 +33,8 @@ namespace HR.Leavemanagament.API.Controllers
 
         // POST api/<LeaveAllocationController>
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateLeaveAllocationDto createDto)
         {
             return Ok(await _mediator.Send(new CreateLeaveAllocationCommand { createAllocationDto = createDto}));

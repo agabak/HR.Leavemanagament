@@ -1,4 +1,5 @@
-﻿using HR.Leavemanagament.MVC.Models;
+﻿using HR.Leavemanagament.MVC.Contracts;
+using HR.Leavemanagament.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,14 +13,15 @@ namespace HR.Leavemanagament.MVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
+      
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+          
             return View();
         }
 
