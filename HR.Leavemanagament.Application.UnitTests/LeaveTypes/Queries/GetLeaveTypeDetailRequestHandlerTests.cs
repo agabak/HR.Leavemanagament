@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using HR.Leavemanagament.Application.Contracts.Persistence;
 using HR.Leavemanagament.Application.DTOs;
-using HR.Leavemanagament.Application.DTOs.Exceptions;
 using HR.Leavemanagament.Application.Features;
 using HR.Leavemanagament.Application.Profiles;
 using HR.Leavemanagament.Application.UnitTests.Mocks;

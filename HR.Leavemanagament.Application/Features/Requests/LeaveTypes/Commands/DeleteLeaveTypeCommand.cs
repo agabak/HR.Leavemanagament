@@ -3,7 +3,7 @@ using MediatR;
 
 namespace HR.Leavemanagament.Application.Features
 {
-    public class DeleteLeaveTypeCommand : IRequest<Unit>
+    public class DeleteLeaveTypeCommand : IRequest<BaseCommandResponse>
     {
         public int Id { get; set; }
     }
