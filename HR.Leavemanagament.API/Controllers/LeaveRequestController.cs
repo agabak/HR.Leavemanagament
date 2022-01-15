@@ -59,10 +59,15 @@ namespace HR.Leavemanagament.API.Controllers
 
         // DELETE api/<LeaveRequestController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult<BaseCommandResponse>> Delete(int id)
         {
             await _mediator.Send(new DeleteLeaveRequestCommand { Id = id });
-            return NoContent();
+            return new BaseCommandResponse
+            {
+                Success = true,
+                Id = 1,
+                Message = "Was deleted"
+            };
         }
     }
 }

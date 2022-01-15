@@ -1,25 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using HR.Leavemanagament.MVC.Services;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace HR.Leavemanagament.MVC.Models
 {
-  
-    public class LeaveRequestVm : CreateLeaveRequestVm
+
+    public class LeaveRequestVm 
     {
         public int Id { get; set; }
-        public DateTime? DateRequested { get; set; }
-        public DateTime? DateActioned { get; set; }
+
+        [Display(Name = "Start Date")]
+        public DateTimeOffset StartDate { get; set; }
+
+        [Display(Name = "End Date")]
+        public DateTimeOffset EndDate { get; set; }
+
+        public LeaveTypeDto LeaveType { get; set; }
+
+        public int LeaveTypeId { get; set; }
+
+        [Display(Name = "Date Requested")]
+        public DateTimeOffset? DateRequested { get; set; }
+
+        [Display(Name = "Comment :")]
+        public string RequestComments { get; set; }
+
+        public DateTimeOffset? DateActioned { get; set; }
+
         public bool? Approved { get; set; }
+
         public bool Cancelled { get; set; }
     }
 
-    public class UpdateLeaveRequestVm : CreateLeaveRequestVm
-    {
-        public int Id { get; set; }
-        public DateTime? DateRequested { get; set; }
-        public bool Cancelled { get; set; }
+    public class UpdateLeaveRequestVm: LeaveRequestVm
+    { 
     }
 
     public class CreateLeaveRequestVm
@@ -28,5 +42,13 @@ namespace HR.Leavemanagament.MVC.Models
         public DateTime EndDate { get; set; }
         public int LeaveTypeId { get; set; }
         public string RequestComments { get; set; }
+    }
+
+    public class LeaveRequestListVm
+    {
+        public int Id { get; set; }
+        public LeaveTypeDto LeaveType { get; set; }
+        public DateTimeOffset DateRequested { get; set; }
+        public bool? Approved { get; set; }
     }
 }

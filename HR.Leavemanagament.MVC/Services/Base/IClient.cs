@@ -12,6 +12,6 @@ namespace HR.Leavemanagament.MVC.Services
 {
     public partial interface IClient
     {
-        
+
     }
 }

@@ -9,11 +9,11 @@ namespace HR.Leavemanagament.MVC.Contracts
 {
     public interface ILeaveRequestService
     {
-        Task<List<LeaveRequestVm>> GetLeaveRequests();
+        Task<List<LeaveRequestListVm>> GetLeaveRequests();
 
         Task<LeaveRequestVm> GetLeaveRequestWithDetails(int id);
 
-        Task<Response<int>> CreateLeaveRequest(LeaveRequestVm leaveType);
+        Task<Response<int>> CreateLeaveRequest(CreateLeaveRequestVm leaveType);
 
         Task<Response<int>> UpdateLeaveRequest(UpdateLeaveRequestVm leaveType);
 

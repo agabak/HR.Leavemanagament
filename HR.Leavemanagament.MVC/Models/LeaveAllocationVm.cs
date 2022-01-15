@@ -10,11 +10,6 @@ namespace HR.Leavemanagament.MVC.Models
         public int Id { get; set; }
     }
 
-    public class UpdateLeaveAllocationVm : CreateLeaveAllocationVm
-    {
-        public int Id { get; set; }
-    }
-
     public class CreateLeaveAllocationVm
     {
         public int NumberOfDays { get; set; }

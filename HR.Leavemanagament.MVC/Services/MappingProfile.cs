@@ -16,12 +16,17 @@ namespace HR.Leavemanagament.MVC.Services
             CreateMap<UpdateLeaveTypeDto, LeaveTypeVm>().ReverseMap();
 
             CreateMap<LeaveRequestDto, LeaveRequestVm>().ReverseMap();
-            CreateMap<CreateLeaveRequestDto, LeaveRequestVm>();
+            CreateMap<CreateLeaveRequestDto, LeaveRequestVm>().ReverseMap();
             CreateMap<UpdateLeaveRequestDto, UpdateLeaveRequestVm>().ReverseMap();
+            CreateMap<LeaveRequestListDto, LeaveRequestListVm>().ReverseMap();
+            CreateMap<LeaveRequestDto, LeaveRequestVm>().ReverseMap();
+            CreateMap<CreateLeaveRequestDto, CreateLeaveRequestVm>().ReverseMap();
+            CreateMap<UpdateLeaveRequestVm, LeaveRequestVm>().ReverseMap();
+            
 
             CreateMap<LeaveAllocationDto, LeaveAllocationVm>().ReverseMap();
-            CreateMap<UpdateLeaveAllocationDto, UpdateLeaveAllocationVm>().ReverseMap();
             CreateMap<CreateLeaveAllocationDto, CreateLeaveAllocationVm>().ReverseMap();
+            CreateMap<UpdateLeaveAllocationDto, LeaveAllocationVm>().ReverseMap();
         }
     }
 }

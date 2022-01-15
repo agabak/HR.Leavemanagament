@@ -21,12 +21,12 @@ namespace HR.Leavemanagament.MVC.Services
     {
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<LeaveAllocationDto> LeaveAllocationGETAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.List<LeaveAllocationDto>> LeaveAllocationGETAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<LeaveAllocationDto> LeaveAllocationGETAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.List<LeaveAllocationDto>> LeaveAllocationGETAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -194,7 +194,7 @@ namespace HR.Leavemanagament.MVC.Services
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<LeaveAllocationDto> LeaveAllocationGETAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.List<LeaveAllocationDto>> LeaveAllocationGETAsync()
         {
             return LeaveAllocationGETAsync(System.Threading.CancellationToken.None);
         }
@@ -202,7 +202,7 @@ namespace HR.Leavemanagament.MVC.Services
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<LeaveAllocationDto> LeaveAllocationGETAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<LeaveAllocationDto>> LeaveAllocationGETAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append("api/LeaveAllocation");
@@ -239,7 +239,7 @@ namespace HR.Leavemanagament.MVC.Services
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<LeaveAllocationDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.List<LeaveAllocationDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);

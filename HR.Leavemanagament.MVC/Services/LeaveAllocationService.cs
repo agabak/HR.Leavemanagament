@@ -33,7 +33,7 @@ namespace HR.Leavemanagament.MVC.Services
             return _mapper.Map<LeaveAllocationVm>(await _client.LeaveAllocationGET2Async(id));
         }
 
-        public async Task<Response<int>> CreateLeaveAllocation(LeaveAllocationVm leaveAllocation)
+        public async Task<Response<int>> CreateLeaveAllocation(CreateLeaveAllocationVm leaveAllocation)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace HR.Leavemanagament.MVC.Services
             }
         }
 
-        public async Task<Response<int>> UpdateLeaveAllocation(UpdateLeaveAllocationVm leaveAllocation)
+        public async Task<Response<int>> UpdateLeaveAllocation(LeaveAllocationVm leaveAllocation)
         {
             try
             {

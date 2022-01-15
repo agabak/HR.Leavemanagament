@@ -17,6 +17,7 @@ namespace HR.Leavemanagament.API.Controllers
         {
             _mediator = mediator;
         }
+
         // GET: api/<LeaveAllocationController>
         [HttpGet]
         public async Task<ActionResult<LeaveAllocationDto>>  Get()
@@ -49,10 +50,15 @@ namespace HR.Leavemanagament.API.Controllers
 
         // DELETE api/<LeaveAllocationController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult<BaseCommandResponse>> Delete(int id)
         {
             await _mediator.Send(new DeleteLeaveAllocationCommand { Id = id });
-            return NoContent();
+            return new BaseCommandResponse
+            {
+                Success = true,
+                Id = id,
+                Message = "Deleted"
+            };
         }
     }
 }

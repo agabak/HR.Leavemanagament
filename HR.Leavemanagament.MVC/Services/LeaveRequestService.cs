@@ -23,17 +23,18 @@ namespace HR.Leavemanagament.MVC.Services
             _httpClient = httpClient;
         }
 
-        public async Task<List<LeaveRequestVm>> GetLeaveRequests()
+        public async Task<List<LeaveRequestListVm>> GetLeaveRequests()
         {
-            return _mapper.Map<List<LeaveRequestVm>>(await _client.LeaveRequestAllAsync());
+            return _mapper.Map<List<LeaveRequestListVm>>(await _client.LeaveRequestAllAsync());
         }
 
         public async Task<LeaveRequestVm> GetLeaveRequestWithDetails(int id)
         {
+       
             return _mapper.Map<LeaveRequestVm>(await _client.LeaveRequestGETAsync(id));
         }
 
-        public async Task<Response<int>> CreateLeaveRequest(LeaveRequestVm leaveRequest)
+        public async Task<Response<int>> CreateLeaveRequest(CreateLeaveRequestVm leaveRequest)
         {
             try
             {
