@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HR.Leavemanagament.Application.DTOs;
 using HR.Leavemanagament.MVC.Contracts;
 using HR.Leavemanagament.MVC.Models;
 using HR.Leavemanagament.MVC.Services.Base;
@@ -6,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace HR.Leavemanagament.MVC.Services
+namespace HR.Leavemanagament.MVC.Services.Base
 {
     public class LeaveAllocationService : BaseHttpService, ILeaveAllocationService
     {
@@ -25,11 +26,13 @@ namespace HR.Leavemanagament.MVC.Services
 
         public async Task<List<LeaveAllocationVm>> GetLeaveAllocations()
         {
+            AddBearerToken();
             return _mapper.Map<List<LeaveAllocationVm>>(await _client.LeaveAllocationGETAsync());
         }
 
         public async Task<LeaveAllocationVm> GetLeaveAllocationWithDetails(int id)
         {
+            AddBearerToken();
             return _mapper.Map<LeaveAllocationVm>(await _client.LeaveAllocationGET2Async(id));
         }
 
@@ -40,6 +43,7 @@ namespace HR.Leavemanagament.MVC.Services
                 var response = new Response<int>();
 
                 CreateLeaveAllocationDto createLeaveAllocationDto = _mapper.Map<CreateLeaveAllocationDto>(leaveAllocation);
+                AddBearerToken();
                 var apiResponse = await _client.LeaveAllocationPOSTAsync(createLeaveAllocationDto);
 
                 if (apiResponse.Success)
@@ -67,6 +71,7 @@ namespace HR.Leavemanagament.MVC.Services
         {
             try
             {
+                AddBearerToken();
                 await _client.LeaveAllocationDELETEAsync(id);
 
                 return new Response<int>
@@ -89,6 +94,7 @@ namespace HR.Leavemanagament.MVC.Services
                 var response = new Response<int>();
 
                 UpdateLeaveAllocationDto updateLeaveAllocationDto = _mapper.Map<UpdateLeaveAllocationDto>(leaveAllocation);
+                AddBearerToken();
                 var apiResponse = await _client.LeaveAllocationPUTAsync("1",updateLeaveAllocationDto);
 
                 if (apiResponse.Success)

@@ -2,6 +2,7 @@
 using HR.Leavemanagament.Application.Features;
 using HR.Leavemanagament.Application.Responses;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -38,6 +39,7 @@ namespace HR.Leavemanagament.API.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [Authorize]
         public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateLeaveTypeDto  createDto)
         {
             return Ok(await _mediator.Send(new CreateLeaveTypeCommand { LeaveTypeDto = createDto }));
@@ -45,6 +47,7 @@ namespace HR.Leavemanagament.API.Controllers
 
         // PUT api/<LeaveTypeController>/5
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<BaseCommandResponse>> Put(int id, [FromBody] UpdateLeaveTypeDto updateDto)
         {
             return Ok(await _mediator.Send(new UpdateLeaveTypeCommand { UpdateLeaveTypeDto = updateDto }));
@@ -52,6 +55,7 @@ namespace HR.Leavemanagament.API.Controllers
 
         // DELETE api/<LeaveTypeController>/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<BaseCommandResponse>> Delete(int id)
         {
           return  Ok(await _mediator.Send(new DeleteLeaveTypeCommand { Id = id }));

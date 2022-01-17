@@ -72,6 +72,7 @@ namespace HR.Leavemanagament.MVC.Controllers
         {
             try
             {
+               
                 var response = await _leaveRequestService.UpdateLeaveRequest(leaveRequestVm);
 
                 if(response.Success)

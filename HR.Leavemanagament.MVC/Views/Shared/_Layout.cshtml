@@ -24,19 +24,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="LeaveType" asp-action="Index"> Leave Type</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="Index"> Leave Request</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="Index"> Leave Request</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="LeaveAllocation" asp-action="Index"> Leave Allocation</a>
-                        </li>
+                        @if(User.Identity.IsAuthenticated)
+                        {
+                            if(User.IsInRole("Administrator"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Manager
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="LeaveType" asp-action="Index"> Leave Type</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="Index"> Leave Request</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="LeaveRequest" asp-action="Index"> Leave Request</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="LeaveAllocation" asp-action="Index"> Leave Allocation</a>
+
+                                    </div>
+                                </li>
+                            }
+                        }           
                     </ul>
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>

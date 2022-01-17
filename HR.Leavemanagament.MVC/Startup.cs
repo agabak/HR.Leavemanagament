@@ -1,16 +1,15 @@
 using HR.Leavemanagament.MVC.Contracts;
 using HR.Leavemanagament.MVC.Services;
+using HR.Leavemanagament.MVC.Services.Base;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace HR.Leavemanagament.MVC
 {
@@ -26,7 +25,18 @@ namespace HR.Leavemanagament.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient<IClient,Client>(cl => cl.BaseAddress = new Uri("https://localhost:5001"));
+            services.AddHttpContextAccessor();
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+
+            services.AddHttpClient<IClient,
+                HR.Leavemanagament.MVC.Services.Client>(cl => cl.BaseAddress = new Uri("https://localhost:5001"));
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -35,7 +45,6 @@ namespace HR.Leavemanagament.MVC
             services.AddScoped<ILeaveAllocationService, LeaveAllocationService>();
 
             services.AddSingleton<ILocalStorageService, LocalStorageService>();
-
             services.AddControllersWithViews();
         }
 
@@ -56,7 +65,8 @@ namespace HR.Leavemanagament.MVC
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCookiePolicy();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

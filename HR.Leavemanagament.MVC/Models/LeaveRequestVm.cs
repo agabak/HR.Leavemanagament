@@ -32,8 +32,22 @@ namespace HR.Leavemanagament.MVC.Models
         public bool Cancelled { get; set; }
     }
 
-    public class UpdateLeaveRequestVm: LeaveRequestVm
-    { 
+    public class UpdateLeaveRequestVm
+    {
+        public int Id { get; set; }
+
+        [Display(Name = "Start Date")]
+        public DateTimeOffset StartDate { get; set; }
+
+        [Display(Name = "End Date")]
+        public DateTimeOffset EndDate { get; set; }
+
+        [Display(Name = "Comment :")]
+        public string RequestComments { get; set; }
+
+        public int LeaveTypeId { get; set; }
+
+        public bool Cancelled { get; set; }
     }
 
     public class CreateLeaveRequestVm

@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HR.Leavemanagament.Applicat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{433188F1-3300-470F-A624-22F043520C7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HR.Leavemanagament.MVC", "HR.Leavemanagament.MVC\HR.Leavemanagament.MVC.csproj", "{D624DD34-3A2D-48FF-B7A2-9F24630DBD0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HR.Leavemanagament.MVC", "HR.Leavemanagament.MVC\HR.Leavemanagament.MVC.csproj", "{D624DD34-3A2D-48FF-B7A2-9F24630DBD0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HR.Leavemanagament.Identity", "HR.Leavemanagament.Identity\HR.Leavemanagament.Identity.csproj", "{E7F8EB24-C4B7-46A9-AED5-D096BAD055FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{D624DD34-3A2D-48FF-B7A2-9F24630DBD0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D624DD34-3A2D-48FF-B7A2-9F24630DBD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D624DD34-3A2D-48FF-B7A2-9F24630DBD0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7F8EB24-C4B7-46A9-AED5-D096BAD055FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7F8EB24-C4B7-46A9-AED5-D096BAD055FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7F8EB24-C4B7-46A9-AED5-D096BAD055FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7F8EB24-C4B7-46A9-AED5-D096BAD055FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{940FD3C4-2EB5-4C89-8388-A2AD69DDE796} = {717891DD-DABD-42CA-99DC-C2B124D5E211}
 		{433188F1-3300-470F-A624-22F043520C7E} = {FAC01838-6217-4B85-8FE4-F0876ADB8349}
 		{D624DD34-3A2D-48FF-B7A2-9F24630DBD0B} = {433188F1-3300-470F-A624-22F043520C7E}
+		{E7F8EB24-C4B7-46A9-AED5-D096BAD055FB} = {369DA3F7-A9AA-4187-B72D-1A9DB0A02D8B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {493BE8B1-3DAD-4699-BE7E-71ABFF224922}

@@ -2,6 +2,7 @@
 using HR.Leavemanagament.Application.Features;
 using HR.Leavemanagament.Application.Responses;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -9,6 +10,7 @@ namespace HR.Leavemanagament.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class LeaveAllocationController : ControllerBase
     {
         private readonly IMediator _mediator;
