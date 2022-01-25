@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HR.Leavemanagament.MVC.Contracts
 {
-    public  interface IAuthenticationService
+    public  interface IAuthService
     {
         Task<bool> Authentication(string email, string password);
         Task<bool> Register(RegisterUserModel registerUser);

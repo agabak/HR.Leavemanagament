@@ -1,11 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace HR.Leavemanagament.MVC.Services.Base
+﻿
+using System.Net.Http;
+namespace HR.Leavemanagament.MVC.Services
 {
-    public partial class Client
+    public partial class Client: IClient
     {
+       
+        public HttpClient HttpClient
+        {
+            get
+            {
+                return _httpClient;
+            }
+        }
     }
 }

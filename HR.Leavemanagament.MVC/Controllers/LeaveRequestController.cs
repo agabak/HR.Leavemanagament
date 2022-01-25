@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HR.Leavemanagament.MVC.Contracts;
 using HR.Leavemanagament.MVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace HR.Leavemanagament.MVC.Controllers
 {
+    [Authorize]
     public class LeaveRequestController : Controller
     {
         private readonly ILeaveRequestService _leaveRequestService;

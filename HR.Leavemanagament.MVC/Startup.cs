@@ -27,14 +27,17 @@ namespace HR.Leavemanagament.MVC
         {
             services.AddHttpContextAccessor();
 
+            //services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IAuthService, AuthService>();
+
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
-
+           
             services.AddHttpClient<IClient,
                 HR.Leavemanagament.MVC.Services.Client>(cl => cl.BaseAddress = new Uri("https://localhost:5001"));
 

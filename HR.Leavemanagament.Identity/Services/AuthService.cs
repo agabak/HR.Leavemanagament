@@ -55,6 +55,32 @@ namespace HR.Leavemanagament.Identity.Services
             return response;
         }
 
+        public async Task<RegistrationResponse> Register(RegistrationRequest request)
+        {
+            var isUserExist = await _userManager.FindByNameAsync(request.UserName);
+
+            if (isUserExist is not null) throw new Exception($"User name {request.Email} already exist.");
+
+            ApplicationUser user = new()
+            {
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                UserName = request.UserName,
+                EmailConfirmed = true
+            };
+
+            var isEmailExist = await _userManager.FindByEmailAsync(request.Email);
+            if (isEmailExist is not null) throw new Exception($"Email {request.Email} is already taken");
+
+            var result = await _userManager.CreateAsync(user, request.Password);
+
+            if (!result.Succeeded) throw new Exception("Fail to register a user");
+
+            await _userManager.AddToRoleAsync(user, "Employee");
+            return new RegistrationResponse() { UserId = user.Id };
+        }
+
         private async Task<JwtSecurityToken> GenerateToken(ApplicationUser user)
         {
             var userClaims = await _userManager.GetClaimsAsync(user);
@@ -63,7 +89,7 @@ namespace HR.Leavemanagament.Identity.Services
 
             var roleClaims = new List<Claim>();
 
-            for(int i = 0; i < roles.Count; i++)
+            for (int i = 0; i < roles.Count; i++)
             {
                 roleClaims.Add(new Claim(ClaimTypes.Role, roles[i]));
             }
@@ -91,9 +117,5 @@ namespace HR.Leavemanagament.Identity.Services
             return jwtSecurityToken;
         }
 
-        public Task<RegistrationResponse> Register(RegistrationRequest request)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

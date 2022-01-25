@@ -14,13 +14,13 @@ using System.Threading.Tasks;
 
 namespace HR.Leavemanagament.MVC.Services
 {
-    public class AuthenticationService : BaseHttpService, Contracts.IAuthenticationService
+    public class AuthService : BaseHttpService, IAuthService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly JwtSecurityTokenHandler _tokenHandler;
         private readonly IMapper _mapper;
-        public AuthenticationService(IClient client, ILocalStorageService localStorageService,IMapper mapper,
-                                     HttpContextAccessor httpContextAccessor) : base(localStorageService, client)
+        public AuthService(IClient client, ILocalStorageService localStorageService,IMapper mapper,
+                                     IHttpContextAccessor httpContextAccessor) : base(localStorageService, client)
         {
             _httpContextAccessor = httpContextAccessor;
             _tokenHandler = new JwtSecurityTokenHandler();
@@ -57,11 +57,12 @@ namespace HR.Leavemanagament.MVC.Services
             var registrationRequest = _mapper.Map<RegistrationRequest>(registerUser);
 
             var resonse = await _client.RegisterAsync(registrationRequest);
-            if(!string.IsNullOrEmpty(resonse.UserId))
+            if (!string.IsNullOrEmpty(resonse.UserId))
             {
                 return true;
             }
             return false;
+           
         }
 
         private IList<Claim> ParseClaims(JwtSecurityToken tokenContent)

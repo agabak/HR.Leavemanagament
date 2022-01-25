@@ -1,10 +1,5 @@
 ﻿using AutoMapper;
-using HR.Leavemanagament.Application.DTOs;
 using HR.Leavemanagament.MVC.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HR.Leavemanagament.MVC.Services
 {
@@ -30,6 +25,7 @@ namespace HR.Leavemanagament.MVC.Services
             CreateMap<UpdateLeaveAllocationDto, LeaveAllocationVm>().ReverseMap();
 
             CreateMap<RegistrationRequest, RegisterUserModel>().ReverseMap();
+            CreateMap<RegisterUserModel, RegisterVm>().ReverseMap();
         }
     }
 }

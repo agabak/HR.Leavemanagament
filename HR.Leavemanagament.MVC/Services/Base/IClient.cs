@@ -5,6 +5,7 @@
 //----------------------
 
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,6 +13,6 @@ namespace HR.Leavemanagament.MVC.Services
 {
     public partial interface IClient
     {
-
+        public HttpClient HttpClient { get;  }
     }
 }

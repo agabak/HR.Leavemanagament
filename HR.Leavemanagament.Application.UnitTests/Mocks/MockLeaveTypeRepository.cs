@@ -31,7 +31,6 @@ namespace HR.Leavemanagament.Application.UnitTests.Mocks
 
             mockRepo.Setup(r => r.Get(It.IsAny<int>())).ReturnsAsync((int id) =>
             {
-
               id = 2;
               return   leaveTypes.Find(x => x.Id == id);
                

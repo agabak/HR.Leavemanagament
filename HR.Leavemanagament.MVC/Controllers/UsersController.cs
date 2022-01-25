@@ -1,4 +1,5 @@
-﻿using HR.Leavemanagament.MVC.Contracts;
+﻿using AutoMapper;
+using HR.Leavemanagament.MVC.Contracts;
 using HR.Leavemanagament.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,11 +12,12 @@ namespace HR.Leavemanagament.MVC.Controllers
    
     public class UsersController : Controller
     {
-        private readonly IAuthenticationService _authenticationService;
-
-        public UsersController(IAuthenticationService authenticationService)
+        private readonly IAuthService _authenticationService;
+        private readonly IMapper _mapper;
+        public UsersController(IAuthService authenticationService, IMapper mapper)
         {
             _authenticationService = authenticationService;
+            _mapper = mapper;
         }
 
         public IActionResult Login(string returnUrl = null)
@@ -43,7 +45,26 @@ namespace HR.Leavemanagament.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVm register)
         {
-            return View();
+            if(ModelState.IsValid)
+            {
+                var retrunUrl = Url.Content("~/");
+                var isCreate = await _authenticationService.Register(_mapper.Map<RegisterUserModel>(register));
+                if (isCreate) return LocalRedirect(retrunUrl);
+            }
+
+            ModelState.AddModelError("", "Registration Attempt Failed. Please try agin");
+
+            return View(register);
+        }
+
+       
+
+        public async Task<IActionResult> Logout()
+        {
+            await _authenticationService.Logout();
+
+            return Redirect("~/");
+
         }
     }
 }
