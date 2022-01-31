@@ -2,14 +2,11 @@
 using HR.Leavemanagament.MVC.Contracts;
 using HR.Leavemanagament.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace HR.Leavemanagament.MVC.Controllers
 {
-   
+
     public class UsersController : Controller
     {
         private readonly IAuthService _authenticationService;
@@ -57,14 +54,11 @@ namespace HR.Leavemanagament.MVC.Controllers
             return View(register);
         }
 
-       
-
         public async Task<IActionResult> Logout()
         {
             await _authenticationService.Logout();
 
             return Redirect("~/");
-
         }
     }
 }
