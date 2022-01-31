@@ -9,17 +9,19 @@ namespace HR.Leavemanagament.Application.Features
 {
     public class GetLeaveAllocationDetailRequestHandler : IRequestHandler<GetLeaveAllocationDetailRequest, LeaveAllocationDto>
     {
-        private readonly ILeaveAllocationRepository _leaveAllocationRepository;
+       
         private readonly IMapper _mapper;
+        private readonly IUnityOfWork _unityOfWork;
 
-        public GetLeaveAllocationDetailRequestHandler(ILeaveAllocationRepository leaveAllocationRepository, IMapper mapper)
+        public GetLeaveAllocationDetailRequestHandler
+            (IMapper mapper, IUnityOfWork unityOfWork)
         {
-            _leaveAllocationRepository = leaveAllocationRepository;
             _mapper = mapper;
+            _unityOfWork = unityOfWork;
         }
         public async Task<LeaveAllocationDto> Handle(GetLeaveAllocationDetailRequest request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<LeaveAllocationDto>(await _leaveAllocationRepository.GetLeaveAllocationWithDetail(request.Id));
+            return _mapper.Map<LeaveAllocationDto>(await _unityOfWork.leaveAllocationRepository.GetLeaveAllocationWithDetail(request.Id));
         }
     }
 }

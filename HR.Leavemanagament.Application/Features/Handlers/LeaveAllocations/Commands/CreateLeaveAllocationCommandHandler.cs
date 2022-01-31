@@ -7,25 +7,27 @@ using MediatR;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using HR.Leavemanagament.Application.Contracts.Identity;
+using System;
+using System.Collections.Generic;
 
 namespace HR.Leavemanagament.Application.Features
 {
     public class CreateLeaveAllocationCommandHandler : IRequestHandler<CreateLeaveAllocationCommand, BaseCommandResponse>
     {
 
-        private readonly ILeaveAllocationRepository _leaveAllocationRepository;
         private readonly ILeaveTypeRepository _leaveTypeRepository;
-        private readonly IMapper _mapper;
-
-
+        private IUnityOfWork _unityOfWork;
+        private IUserService _userService;
+       
         public CreateLeaveAllocationCommandHandler
-            (ILeaveAllocationRepository leaveAllocationRepository,
-             ILeaveTypeRepository leaveTypeRepository,
-             IMapper mapper)
+            (ILeaveTypeRepository leaveTypeRepository,
+             IUnityOfWork unityOfWork,
+             IUserService userService)
         {
-            _leaveAllocationRepository = leaveAllocationRepository;
             _leaveTypeRepository = leaveTypeRepository;
-            _mapper = mapper;
+            _unityOfWork = unityOfWork;
+            _userService = userService;
         }
 
         public async Task<BaseCommandResponse> Handle(CreateLeaveAllocationCommand request, CancellationToken cancellationToken)
@@ -42,11 +44,26 @@ namespace HR.Leavemanagament.Application.Features
                 return response;
             }
 
-            var leaveAllocation = _mapper.Map<LeaveAllocation>(request.createAllocationDto);
+            var leaveType = await _unityOfWork.leaveTypeRepository.Get(request.createAllocationDto.LeaveTypeId);
+            var employees = await _userService.GetEmployees();
+            var period = DateTime.Now.Year;
+            var allocations = new List<LeaveAllocation>();
 
-            leaveAllocation = await _leaveAllocationRepository.Add(leaveAllocation);
+            foreach(var employee in employees)
+            {
+                if (await _unityOfWork.leaveAllocationRepository.AllocationExists(employee.Id, leaveType.Id, period)) continue;
 
-            response.Id = leaveAllocation.Id;
+                allocations.Add(new LeaveAllocation
+                    {
+                        EmployeeId = employee.Id,
+                        LeaveTypeId = leaveType.Id,
+                        NumberOfDays = leaveType.DefaultDays,
+                        Period = period
+                    });
+            }
+
+            await _unityOfWork.leaveAllocationRepository.AddAllocations(allocations);
+            await _unityOfWork.SaveChanges();
             response.Success = true;
             response.Message = "Leave Allocation Created Successful";
             return response;
