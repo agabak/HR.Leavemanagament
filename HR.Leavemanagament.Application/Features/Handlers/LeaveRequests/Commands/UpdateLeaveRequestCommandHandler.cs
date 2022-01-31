@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using HR.Leavemanagament.Application.Contracts.Infrastructure;
 using HR.Leavemanagament.Application.Contracts.Persistence;
-using HR.Leavemanagament.Application.DTOs.Exceptions;
+using HR.Leavemanagament.Application.Exceptions;
 using HR.Leavemanagament.Application.DTOs.LeaveRequests.Validators;
 using HR.Leavemanagament.Application.Models;
 using HR.Leavemanagament.Application.Responses;

@@ -15,6 +15,12 @@ namespace HR.Leavemanagament.Persistance.Repositories
         {
             _dBContext = dBContext;
         }
+
+        public Task ChangeApprovalStatus(LeaveRequest leaveRequest, bool? approvalStatus)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public async Task<LeaveRequest> GetLeaveRequestWithDetail(int id)
         {
             var leaveRequest = await _dBContext.LeaveRequests.Include(q => q.LeaveType)
@@ -27,6 +33,11 @@ namespace HR.Leavemanagament.Persistance.Repositories
             var leaveRequests = await _dBContext.LeaveRequests.Include(q => q.LeaveType)
                                                  .ToListAsync();
             return leaveRequests;
+        }
+
+        public Task<List<LeaveRequest>> GetLeaveRequestWithDetails(string userId)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

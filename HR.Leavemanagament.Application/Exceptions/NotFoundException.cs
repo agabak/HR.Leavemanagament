@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HR.Leavemanagament.Application.DTOs.Exceptions
+namespace HR.Leavemanagament.Application.Exceptions
 {
     public class NotFoundException: ApplicationException
     {

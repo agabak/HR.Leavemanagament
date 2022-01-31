@@ -4,7 +4,7 @@ using HR.Leavemanagament.Application.Contracts.Persistence;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using HR.Leavemanagament.Application.DTOs.Exceptions;
+using HR.Leavemanagament.Application.Exceptions;
 
 namespace HR.Leavemanagament.Application.Features
 {
