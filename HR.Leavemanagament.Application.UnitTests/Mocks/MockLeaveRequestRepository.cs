@@ -9,7 +9,7 @@ namespace HR.Leavemanagament.Application.UnitTests.Mocks
     public static class MockLeaveRequestRepository
     {
 
-        public static Mock<ILeaveRequestResposity>  GetLeaveRequestRepository()
+        public static Mock<IUnityOfWork>  GetLeaveRequestRepository()
         {
             var leaveRequests = new List<LeaveRequest>
             {
@@ -40,24 +40,24 @@ namespace HR.Leavemanagament.Application.UnitTests.Mocks
                     Cancelled = false
                 },
             };
-            var mockRepo = new Mock<ILeaveRequestResposity>();
+            var mockRepo = new Mock<IUnityOfWork>();
 
-            mockRepo.Setup(r => r.GetAll()).ReturnsAsync(leaveRequests);
+            mockRepo.Setup(r => r.leaveRequestResposity.GetAll()).ReturnsAsync(leaveRequests);
 
-            mockRepo.Setup(r => r.GetLeaveRequestWithDetails()).ReturnsAsync(leaveRequests);
+            mockRepo.Setup(r => r.leaveRequestResposity.GetLeaveRequestWithDetails()).ReturnsAsync(leaveRequests);
 
-            mockRepo.Setup(r => r.Get(It.IsAny<int>())).ReturnsAsync((int id) =>
+            mockRepo.Setup(r => r.leaveRequestResposity.Get(It.IsAny<int>())).ReturnsAsync((int id) =>
             {
                 return leaveRequests.Find(x => x.Id == 2);
 
             });
 
-            mockRepo.Setup(r => r.GetLeaveRequestWithDetail(It.IsAny<int>())).ReturnsAsync((int id) =>
+            mockRepo.Setup(r => r.leaveRequestResposity.GetLeaveRequestWithDetail(It.IsAny<int>())).ReturnsAsync((int id) =>
             {
                 return leaveRequests.Find(x => x.Id == 2);
             });
 
-            mockRepo.Setup(r => r.Add(It.IsAny<LeaveRequest>())).ReturnsAsync((LeaveRequest leaveRequest) =>
+            mockRepo.Setup(r => r.leaveRequestResposity.Add(It.IsAny<LeaveRequest>())).ReturnsAsync((LeaveRequest leaveRequest) =>
             {
                 leaveRequests.Add(leaveRequest);
                 return leaveRequest;

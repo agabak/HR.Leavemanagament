@@ -17,7 +17,7 @@ namespace HR.Leavemanagament.Application.UnitTests.LeaveTypes.Commands
     public class CreateLeaveTypeCommandHandlerTests
     {
         private readonly IMapper _mapper;
-        private readonly Mock<ILeaveTypeRepository> _mockRepo;
+        private readonly Mock<IUnityOfWork> _mockRepo;
         private readonly CreateLeaveTypeDto _leaveTypeDto;
         private readonly CreateLeaveTypeCommandHandler _handler;
 
@@ -47,7 +47,7 @@ namespace HR.Leavemanagament.Application.UnitTests.LeaveTypes.Commands
 
             result.ShouldBeOfType<BaseCommandResponse>();
 
-            var leaveTypes = await _mockRepo.Object.GetAll();
+            var leaveTypes = await _mockRepo.Object.leaveTypeRepository.GetAll();
 
             leaveTypes.Count.ShouldBe(3);
         }
@@ -63,7 +63,7 @@ namespace HR.Leavemanagament.Application.UnitTests.LeaveTypes.Commands
                        await _handler.Handle(new CreateLeaveTypeCommand() { LeaveTypeDto = _leaveTypeDto }, CancellationToken.None)
                );
 
-            var leaveTypes = await _mockRepo.Object.GetAll();
+            var leaveTypes = await _mockRepo.Object.leaveTypeRepository.GetAll();
 
             leaveTypes.Count.ShouldBe(2);
 

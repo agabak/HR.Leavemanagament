@@ -58,6 +58,7 @@ namespace HR.Leavemanagament.Application.Features
             leaveRequest.EmployeeId = userId;
 
             leaveRequest = await _unityOfWork.leaveRequestResposity.Add(leaveRequest);
+                           await _unityOfWork.SaveChanges();
 
             response.Id = leaveRequest.Id;
             response.Success = true;

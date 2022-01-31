@@ -7,7 +7,7 @@ namespace HR.Leavemanagament.Application.UnitTests.Mocks
 {
     public static class MockLeaveTypeRepository
     {
-        public static Mock<ILeaveTypeRepository> GetLeaveTypeRepository()
+        public static Mock<IUnityOfWork> GetLeaveTypeRepository()
         {
 
             var leaveTypes = new List<LeaveType>
@@ -25,18 +25,18 @@ namespace HR.Leavemanagament.Application.UnitTests.Mocks
                     Name = "Test Sick"
                 }
             };
-            var mockRepo = new Mock<ILeaveTypeRepository>();
+            var mockRepo = new Mock<IUnityOfWork>();
 
-            mockRepo.Setup(r => r.GetAll()).ReturnsAsync(leaveTypes);
+            mockRepo.Setup(r => r.leaveTypeRepository.GetAll()).ReturnsAsync(leaveTypes);
 
-            mockRepo.Setup(r => r.Get(It.IsAny<int>())).ReturnsAsync((int id) =>
+            mockRepo.Setup(r => r.leaveTypeRepository.Get(It.IsAny<int>())).ReturnsAsync((int id) =>
             {
               id = 2;
               return   leaveTypes.Find(x => x.Id == id);
                
             });
 
-            mockRepo.Setup(r => r.Add(It.IsAny<LeaveType>())).ReturnsAsync((LeaveType leaveType) =>
+            mockRepo.Setup(r => r.leaveTypeRepository.Add(It.IsAny<LeaveType>())).ReturnsAsync((LeaveType leaveType) =>
             {
                 leaveTypes.Add(leaveType);
                 return leaveType;

@@ -19,7 +19,7 @@ namespace HR.Leavemanagament.Application.UnitTests.LeaveTypes.Queries
     public class GetLeaveTypeListRequestHandlerTests
     {
         private readonly IMapper _mapper;
-        private readonly Mock<ILeaveTypeRepository> _mockRepo;
+        private readonly Mock<IUnityOfWork> _mockRepo;
 
         public GetLeaveTypeListRequestHandlerTests()
         {

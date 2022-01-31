@@ -14,15 +14,21 @@ namespace HR.Leavemanagament.Application.Features.Handlers.LeaveTypes.Commands
     {
         private readonly ILeaveTypeRepository _leaveTypeRepository;
         private readonly IMapper _mapper;
+        private readonly IUnityOfWork _unityOfWork;
 
 
-        public UpdateLeaveTypeCommandHandler(ILeaveTypeRepository leaveTypeRepository, IMapper mapper)
+        public UpdateLeaveTypeCommandHandler(IUnityOfWork unityOfWork, IMapper mapper)
         {
-            _leaveTypeRepository = leaveTypeRepository;
+            _unityOfWork = unityOfWork;
             _mapper = mapper;
         }
         public async Task<BaseCommandResponse> Handle(UpdateLeaveTypeCommand request, CancellationToken cancellationToken)
         {
+            var leaveType = await _unityOfWork.leaveTypeRepository.Get(request.UpdateLeaveTypeDto.Id);
+
+            // return if nothing is there...
+            if (leaveType is null) throw new NotFoundException(nameof(LeaveType), request.UpdateLeaveTypeDto.Id);
+
             var response = new BaseCommandResponse();
             var validator = new UpdateLeaveTypeValidator();
             var validationResult = await validator.ValidateAsync(request.UpdateLeaveTypeDto);
@@ -32,13 +38,10 @@ namespace HR.Leavemanagament.Application.Features.Handlers.LeaveTypes.Commands
                 throw new ValidationException(validationResult);
             }
 
-            var leaveType = await _leaveTypeRepository.Get(request.UpdateLeaveTypeDto.Id);
-
-            if (leaveType is null) throw new NotFoundException(nameof(LeaveType), request.UpdateLeaveTypeDto.Id);
-
             _mapper.Map(request.UpdateLeaveTypeDto, leaveType);
 
-            await _leaveTypeRepository.Update(leaveType);
+            await _unityOfWork.leaveTypeRepository.Update(leaveType);
+            await _unityOfWork.SaveChanges();
 
             response.Id = leaveType.Id;
             response.Success = true;

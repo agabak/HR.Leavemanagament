@@ -3,7 +3,6 @@ using HR.Leavemanagament.Application.Exceptions;
 using HR.Leavemanagament.Application.Responses;
 using HR.Leavemanagament.Domain;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,10 +11,11 @@ namespace HR.Leavemanagament.Application.Features.Handlers.LeaveTypes.Commands
     public class DeleteLeaveTypeCommandHandler : IRequestHandler<DeleteLeaveTypeCommand, BaseCommandResponse>
     {
         private readonly ILeaveTypeRepository _leaveTypeRepository;
+        private readonly IUnityOfWork _unityOfWork;
     
-        public DeleteLeaveTypeCommandHandler(ILeaveTypeRepository leaveTypeRepository)
+        public DeleteLeaveTypeCommandHandler(IUnityOfWork unityOfWork)
         {
-            _leaveTypeRepository = leaveTypeRepository;
+            _unityOfWork = unityOfWork;
         }
 
         public async Task<BaseCommandResponse> Handle(DeleteLeaveTypeCommand request, CancellationToken cancellationToken)
@@ -25,7 +25,8 @@ namespace HR.Leavemanagament.Application.Features.Handlers.LeaveTypes.Commands
 
             if (leaveType is null) throw new NotFoundException(nameof(LeaveType), request.Id);
 
-            await _leaveTypeRepository.Delete(leaveType);
+            await _unityOfWork.leaveTypeRepository.Delete(leaveType);
+            await _unityOfWork.SaveChanges();
 
             response.Message = "Delete succesful";
             response.Success = true;
