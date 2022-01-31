@@ -13,13 +13,13 @@ namespace HR.Leavemanagament.Application.Features.Handlers.LeaveRequests.Command
 {
     public class ChangeLeaveRequestApprovalCommandHandler : IRequestHandler<ChangeLeaveRequestApprovalCommand, BaseCommandResponse>
     {
-        private readonly ILeaveRequestResposity _leaveRequestResposity;
         private readonly IMapper _mapper;
+        private readonly IUnityOfWork _unityOfWork;
 
-        public ChangeLeaveRequestApprovalCommandHandler(ILeaveRequestResposity leaveRequestResposity, IMapper mapper)
+        public ChangeLeaveRequestApprovalCommandHandler(IMapper mapper, IUnityOfWork unityOfWork)
         {
-            _leaveRequestResposity = leaveRequestResposity;
             _mapper = mapper;
+            _unityOfWork = unityOfWork;
         }
 
         public async Task<BaseCommandResponse> Handle(ChangeLeaveRequestApprovalCommand request, CancellationToken cancellationToken)
@@ -36,14 +36,15 @@ namespace HR.Leavemanagament.Application.Features.Handlers.LeaveRequests.Command
                 return response;
             }
 
-            var leaveRequest = await _leaveRequestResposity.Get(request.ChangeLeaveRequestApproval.Id);
+            var leaveRequest = await _unityOfWork.leaveRequestResposity.Get(request.ChangeLeaveRequestApproval.Id);
 
             if (leaveRequest is null) 
                  throw new NotFoundException(nameof(ChangeLeaveRequestApprovalDto), request.ChangeLeaveRequestApproval.Id);
 
             leaveRequest.Approved = request.ChangeLeaveRequestApproval.Approval;
 
-            await _leaveRequestResposity.Update(leaveRequest);
+            await _unityOfWork.leaveRequestResposity.Update(leaveRequest);
+            await _unityOfWork.SaveChanges();
 
             response.Success = true;
             response.Message = "Leave Request is approved";

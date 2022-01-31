@@ -10,44 +10,54 @@ using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
+using HR.Leavemanagament.Application.Constants;
 
 namespace HR.Leavemanagament.Application.Features
 {
     public class CreateLeaveRequestCommandHandler : IRequestHandler<CreateLeaveRequestCommand, BaseCommandResponse>
     {
-        private readonly ILeaveRequestResposity _leaveRequestResposity;
-        private readonly ILeaveTypeRepository _leaveTypeRepository;
         private readonly IMapper _mapper;
         private readonly IEmailSender _emailSender;
+        private readonly IUnityOfWork _unityOfWork;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CreateLeaveRequestCommandHandler(ILeaveRequestResposity leaveRequestResposity,
-                                                ILeaveTypeRepository leaveTypeRepository,
-                                                IMapper mapper,
-                                                IEmailSender emailSender)
+        public CreateLeaveRequestCommandHandler(IMapper mapper,IEmailSender emailSender,
+                                                IUnityOfWork unityOfWork,IHttpContextAccessor httpContextAccessor)
         {
-            _leaveRequestResposity = leaveRequestResposity;
-            _leaveTypeRepository = leaveTypeRepository;
             _mapper = mapper;
             _emailSender = emailSender;
+            _unityOfWork = unityOfWork;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<BaseCommandResponse> Handle(CreateLeaveRequestCommand request, CancellationToken cancellationToken)
         {
             var response = new BaseCommandResponse();
-            var validator = new CreateLeaveRequestValidator(_leaveTypeRepository);
+            var validator = new CreateLeaveRequestValidator(_unityOfWork.leaveTypeRepository);
             var validationResult = await validator.ValidateAsync(request.CreateLeaveRequestDto);
+            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(q => q.Type == CustomClaimTypes.uid).Value;
 
-            if (!validationResult.IsValid)
+            var allocations = await _unityOfWork.leaveAllocationRepository
+                                   .GetUserAllocation(userId, request.CreateLeaveRequestDto.LeaveTypeId);
+
+            if (allocations is null)
             {
-                throw new ValidationException(validationResult);
+                validationResult.Errors
+                                .Add(new FluentValidation.Results
+                                .ValidationFailure(nameof(request.CreateLeaveRequestDto.LeaveTypeId), ""));
             }
+
+            if (!validationResult.IsValid) throw new ValidationException(validationResult);
 
 
             var leaveRequest = _mapper.Map<LeaveRequest>(request.CreateLeaveRequestDto);
 
             leaveRequest.DateRequested = DateTime.Now;
+            leaveRequest.EmployeeId = userId;
 
-            leaveRequest = await _leaveRequestResposity.Add(leaveRequest);
+            leaveRequest = await _unityOfWork.leaveRequestResposity.Add(leaveRequest);
 
             response.Id = leaveRequest.Id;
             response.Success = true;
