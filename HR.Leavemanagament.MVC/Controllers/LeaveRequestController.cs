@@ -4,6 +4,7 @@ using HR.Leavemanagament.MVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Threading.Tasks;
 
@@ -14,76 +15,79 @@ namespace HR.Leavemanagament.MVC.Controllers
     {
         private readonly ILeaveRequestService _leaveRequestService;
         private readonly IMapper _mapper;
+        private readonly ILeaveTypeService _leaveTypeService;
 
-        public LeaveRequestController(ILeaveRequestService leaveRequestService, IMapper mapper)
+        public LeaveRequestController(
+            ILeaveRequestService leaveRequestService,
+            IMapper mapper,
+            ILeaveTypeService leaveTypeService)
         {
             _leaveRequestService = leaveRequestService;
+            _leaveTypeService = leaveTypeService;
             _mapper = mapper;
         }
-        // GET: HomeController1
-        public async Task<ActionResult> Index()
+        // GET: LeaveRequest/Create
+        public async Task<ActionResult> Create()
         {
-            return View(await _leaveRequestService.GetLeaveRequests());
+            var leaveTypes = await _leaveTypeService.GetLeaveTypes();
+            var leaveTypeItems = new SelectList(leaveTypes, "Id", "Name");
+            var model = new CreateLeaveRequestVM
+            {
+                LeaveTypes = leaveTypeItems
+            };
+            return View(model);
         }
 
-        // GET: HomeController1/Details/5
-        public async Task<ActionResult> Details(int id)
-        {
-            return View(await _leaveRequestService.GetLeaveRequestWithDetails(id));
-        }
-
-        // GET: HomeController1/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: HomeController1/Create
+        // POST: LeaveRequest/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(CreateLeaveRequestVM leaveRequestVm)
+        public async Task<ActionResult> Create(CreateLeaveRequestVM leaveRequest)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var response = await _leaveRequestService
-                                      .CreateLeaveRequest(leaveRequestVm);
-
-                if(response.Success)
+                var response = await _leaveRequestService.CreateLeaveRequest(leaveRequest);
+                if (response.Success)
+                {
                     return RedirectToAction(nameof(Index));
-
-                ModelState.AddModelError(" ", response.ValidationErrors);
-            }
-            catch(Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message); 
-            }
-            return View();
-        }
-
-        // GET: HomeController1/Delete/5
-        public async Task<ActionResult> Delete(int id)
-        {
-            return View(await _leaveRequestService.GetLeaveRequestWithDetails(id));
-        }
-
-        // POST: HomeController1/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                var response = await _leaveRequestService.DeleteLeaveRequest(id);
-                if(response.Success)
-                    return RedirectToAction(nameof(Index));
-
+                }
                 ModelState.AddModelError("", response.ValidationErrors);
             }
-            catch(Exception ex)
+
+            var leaveTypes = await _leaveTypeService.GetLeaveTypes();
+            var leaveTypeItems = new SelectList(leaveTypes, "Id", "Name");
+            leaveRequest.LeaveTypes = leaveTypeItems;
+
+            return View(leaveRequest);
+        }
+
+        [Authorize(Roles = "Administractor")]
+        // GET: LeaveRequest
+        public async Task<ActionResult> Index()
+        {
+            var model = await _leaveRequestService.GetAdminLeaveRequestList();
+            return View(model);
+        }
+
+        public async Task<ActionResult> Details(int id)
+        {
+            var model = await _leaveRequestService.GetLeaveRequest(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administractor")]
+        public async Task<ActionResult> ApproveRequest(int id, bool approved)
+        {
+            try
             {
-                ModelState.AddModelError(" ", ex.Message);
+                await _leaveRequestService.ApproveLeaveRequest(id, approved);
+                return RedirectToAction(nameof(Index));
             }
-            return View();
+            catch (Exception ex)
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

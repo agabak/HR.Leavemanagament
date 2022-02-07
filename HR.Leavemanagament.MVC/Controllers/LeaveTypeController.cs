@@ -1,4 +1,5 @@
-﻿using HR.Leavemanagament.MVC.Contracts;
+﻿using HR.Leavemanagament.Application.Exceptions;
+using HR.Leavemanagament.MVC.Contracts;
 using HR.Leavemanagament.MVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HR.Leavemanagament.MVC.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administractor")]
     public class LeaveTypeController : Controller
     {
         private readonly ILogger<LeaveTypeController> _logger;
@@ -51,6 +52,7 @@ namespace HR.Leavemanagament.MVC.Controllers
             try
             {
                 var response = await _leaveTypeService.CreateLeaveType(leaveType);
+                if (response is null) throw new NotFoundException(nameof(LeaveTypeVm), leaveType.Name);
                 if (response.Success)
                 {
                     return RedirectToAction(nameof(Index));
@@ -81,6 +83,7 @@ namespace HR.Leavemanagament.MVC.Controllers
             try
             {
                 var response = await _leaveTypeService.UpdateLeaveType(leaveType);
+                if (response is null) throw new NotFoundException(nameof(LeaveTypeVm),  leaveType.Id);
                 if (response.Success)
                 {
                     return RedirectToAction(nameof(Index));
@@ -103,6 +106,7 @@ namespace HR.Leavemanagament.MVC.Controllers
             try
             {
                 var response = await _leaveTypeService.DeleteLeaveType(id);
+                if (response is null) throw new NotFoundException(nameof(LeaveTypeVm), id);
                 if (response.Success)
                 {
                     return RedirectToAction(nameof(Index));
@@ -125,6 +129,7 @@ namespace HR.Leavemanagament.MVC.Controllers
             try
             {
                 var response = await _leaveAllocationService.CreateLeaveAllocations(id);
+                if (response is null) throw new NotFoundException(nameof(LeaveAllocationVM), id);
                 if (response.Success)
                 {
                     return RedirectToAction(nameof(Index));
