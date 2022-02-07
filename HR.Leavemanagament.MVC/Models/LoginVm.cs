@@ -2,7 +2,7 @@
 
 namespace HR.Leavemanagament.MVC.Models
 {
-    public class LoginVm
+    public class LoginVM
     {
         [Required]
         [EmailAddress]
@@ -13,5 +13,6 @@ namespace HR.Leavemanagament.MVC.Models
         public string Password { get; set; }
 
         public string ReturnUrl { get; set; }
+
     }
 }

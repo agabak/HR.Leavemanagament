@@ -2,6 +2,7 @@
 using HR.Leavemanagament.Domain;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HR.Leavemanagament.Persistance.Repositories
@@ -15,26 +16,29 @@ namespace HR.Leavemanagament.Persistance.Repositories
             _dBContext = dBContext;
         }
 
-        public Task AddAllocations(List<LeaveAllocation> allocations)
+        public async Task AddAllocations(List<LeaveAllocation> allocations)
         {
-            throw new System.NotImplementedException();
+            await _dBContext.AddRangeAsync(allocations);
         }
 
-        public Task<bool> AllocationExists(string userId, int leaveTypeid, int period)
+        public async Task<bool> AllocationExists(string userId, int leaveTypeid, int period)
         {
-            throw new System.NotImplementedException();
+            return await _dBContext.leaveAllocations.AnyAsync(q => q.EmployeeId == userId 
+                                                              && q.LeaveTypeId == leaveTypeid
+                                                              && q.Period == period);
         }
 
         public async Task<List<LeaveAllocation>> GetLeaveAllocationsWithDetails()
         {
-            var leaveAllocations = await _dBContext.leaveAllocations.Include(a => a.LeaveType)
+            return await _dBContext.leaveAllocations.Include(a => a.LeaveType)
                                                    .ToListAsync();
-            return leaveAllocations;
         }
 
-        public Task<List<LeaveAllocation>> GetLeaveAllocationsWithDetails(string userId)
+        public async Task<List<LeaveAllocation>> GetLeaveAllocationsWithDetails(string userId)
         {
-            throw new System.NotImplementedException();
+            return await _dBContext.leaveAllocations.Where(q => q.EmployeeId == userId)
+             .Include(q => q.LeaveType)
+             .ToListAsync();
         }
 
         public async Task<LeaveAllocation> GetLeaveAllocationWithDetail(int id)
@@ -45,9 +49,10 @@ namespace HR.Leavemanagament.Persistance.Repositories
             return leaveAllocation;
         }
 
-        public Task<LeaveAllocation> GetUserAllocation(string userId, int leaveTypeId)
+        public async Task<LeaveAllocation> GetUserAllocation(string userId, int leaveTypeId)
         {
-            throw new System.NotImplementedException();
+            return await _dBContext.leaveAllocations.FirstOrDefaultAsync(q => q.EmployeeId == userId
+                                        && q.LeaveTypeId == leaveTypeId);
         }
     }
 }

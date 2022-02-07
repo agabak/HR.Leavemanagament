@@ -23,14 +23,16 @@ namespace HR.Leavemanagament.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginVm login,string returnUrl)
+        public async Task<IActionResult> Login(LoginVM login, string returnUrl)
         {
-            returnUrl ??= Url.Content("~/");
-            var isLoggedIn = await _authenticationService.Authentication(login.Email, login.Password);
-            if (isLoggedIn) return LocalRedirect(returnUrl);
-
-            ModelState.AddModelError("", "Log in Attemp Failed. Please try again.");
-
+            if (ModelState.IsValid)
+            {
+                returnUrl ??= Url.Content("~/");
+                var isLoggedIn = await _authenticationService.Authentication(login.Email, login.Password);
+                if (isLoggedIn)
+                    return LocalRedirect(returnUrl);
+            }
+            ModelState.AddModelError("", "Log In Attempt Failed. Please try again.");
             return View(login);
         }
 
@@ -40,25 +42,26 @@ namespace HR.Leavemanagament.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterVm register)
+        public async Task<IActionResult> Register(RegisterVm registration)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var retrunUrl = Url.Content("~/");
-                var isCreate = await _authenticationService.Register(_mapper.Map<RegisterUserModel>(register));
-                if (isCreate) return LocalRedirect(retrunUrl);
+                var returnUrl = Url.Content("~/");
+                var isCreated = await _authenticationService.Register(_mapper.Map<RegisterUserModel>(registration));
+                if (isCreated)
+                    return LocalRedirect(returnUrl);
             }
 
-            ModelState.AddModelError("", "Registration Attempt Failed. Please try agin");
-
-            return View(register);
+            ModelState.AddModelError("", "Registration Attempt Failed. Please try again.");
+            return View(registration);
         }
 
-        public async Task<IActionResult> Logout()
+        [HttpPost]
+        public async Task<IActionResult> Logout(string returnUrl)
         {
+            returnUrl ??= Url.Content("~/");
             await _authenticationService.Logout();
-
-            return Redirect("~/");
+            return LocalRedirect(returnUrl);
         }
     }
 }

@@ -18,6 +18,8 @@ namespace HR.Leavemanagament.Persistance
             services.AddScoped<ILeaveAllocationRepository, LeaveAllocationRepository>();
             services.AddScoped<ILeaveRequestResposity, LeaveRequestResposity>();
 
+            services.AddScoped<IUnityOfWork, UnitOfWork>();
+
             return services;
         }
     }

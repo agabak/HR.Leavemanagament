@@ -41,7 +41,7 @@ namespace HR.Leavemanagament.MVC.Controllers
         // POST: HomeController1/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(CreateLeaveRequestVm leaveRequestVm)
+        public async Task<ActionResult> Create(CreateLeaveRequestVM leaveRequestVm)
         {
             try
             {
@@ -56,35 +56,6 @@ namespace HR.Leavemanagament.MVC.Controllers
             catch(Exception ex)
             {
                 ModelState.AddModelError("", ex.Message); 
-            }
-            return View();
-        }
-
-        // GET: HomeController1/Edit/5
-        public async Task<ActionResult> Edit(int id)
-        {
-            var leaveRquest = await _leaveRequestService.GetLeaveRequestWithDetails(id);
-            return View(_mapper.Map<UpdateLeaveRequestVm>(leaveRquest));
-        }
-
-        // POST: HomeController1/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, UpdateLeaveRequestVm  leaveRequestVm)
-        {
-            try
-            {
-               
-                var response = await _leaveRequestService.UpdateLeaveRequest(leaveRequestVm);
-
-                if(response.Success)
-                    return RedirectToAction(nameof(Index));
-
-                ModelState.AddModelError("", response.ValidationErrors);
-            }
-            catch(Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
             }
             return View();
         }

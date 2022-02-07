@@ -12,43 +12,27 @@ namespace HR.Leavemanagament.MVC.Services.Base
     public class LeaveAllocationService : BaseHttpService, ILeaveAllocationService
     {
         private readonly ILocalStorageService _localStorageService;
-        private readonly IMapper _mapper;
         private IClient _httpClient;
 
         public LeaveAllocationService(
             ILocalStorageService localStorageService,
-            IMapper mapper, IClient httpClient) : base(localStorageService, httpClient)
+            IClient httpClient) : base(localStorageService, httpClient)
         {
             _localStorageService = localStorageService;
-            _mapper = mapper;
             _httpClient = httpClient;
         }
 
-        public async Task<List<LeaveAllocationVm>> GetLeaveAllocations()
-        {
-            AddBearerToken();
-            return _mapper.Map<List<LeaveAllocationVm>>(await _client.LeaveAllocationGETAsync());
-        }
 
-        public async Task<LeaveAllocationVm> GetLeaveAllocationWithDetails(int id)
-        {
-            AddBearerToken();
-            return _mapper.Map<LeaveAllocationVm>(await _client.LeaveAllocationGET2Async(id));
-        }
-
-        public async Task<Response<int>> CreateLeaveAllocation(CreateLeaveAllocationVm leaveAllocation)
+        public async Task<Response<int>> CreateLeaveAllocations(int leaveTypeId)
         {
             try
             {
                 var response = new Response<int>();
-
-                CreateLeaveAllocationDto createLeaveAllocationDto = _mapper.Map<CreateLeaveAllocationDto>(leaveAllocation);
+                CreateLeaveAllocationDto createLeaveAllocation = new() { LeaveTypeId = leaveTypeId };
                 AddBearerToken();
-                var apiResponse = await _client.LeaveAllocationPOSTAsync(createLeaveAllocationDto);
-
+                var apiResponse = await _client.LeaveAllocationPOSTAsync(createLeaveAllocation);
                 if (apiResponse.Success)
                 {
-                    response.Data = apiResponse.Id;
                     response.Success = true;
                 }
                 else
@@ -58,64 +42,14 @@ namespace HR.Leavemanagament.MVC.Services.Base
                         response.ValidationErrors += error + Environment.NewLine;
                     }
                 }
-
                 return response;
             }
             catch (ApiException ex)
             {
-                return ConvertApiExpceptions<int>(ex);
-            }
-        }
-
-        public async Task<Response<int>> DeleteLeaveAllocation(int id)
-        {
-            try
-            {
-                AddBearerToken();
-                await _client.LeaveAllocationDELETEAsync(id);
-
-                return new Response<int>
-                {
-                    Success = true,
-                    Message = "Deleted"
-                };
-
-            }
-            catch (ApiException ex)
-            {
-                return ConvertApiExpceptions<int>(ex);
-            }
-        }
-
-        public async Task<Response<int>> UpdateLeaveAllocation(LeaveAllocationVm leaveAllocation)
-        {
-            try
-            {
-                var response = new Response<int>();
-
-                UpdateLeaveAllocationDto updateLeaveAllocationDto = _mapper.Map<UpdateLeaveAllocationDto>(leaveAllocation);
-                AddBearerToken();
-                var apiResponse = await _client.LeaveAllocationPUTAsync("1",updateLeaveAllocationDto);
-
-                if (apiResponse.Success)
-                {
-                    response.Data = apiResponse.Id;
-                    response.Success = true;
-                }
-                else
-                {
-                    foreach (var error in apiResponse.Errors)
-                    {
-                        response.ValidationErrors += error + Environment.NewLine;
-                    }
-                }
-
-                return response;
-            }
-            catch (ApiException ex)
-            {
-                return ConvertApiExpceptions<int>(ex);
+                //return ConvertApiExceptions<int>(ex);
+                return null;
             }
         }
     }
 }
+

@@ -28,6 +28,7 @@ namespace HR.Leavemanagament.MVC.Models
         public string Email { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }
